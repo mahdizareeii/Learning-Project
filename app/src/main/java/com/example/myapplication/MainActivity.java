@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btn1;
     private EditText editText;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,11 +26,23 @@ public class MainActivity extends AppCompatActivity {
 
 
         btn1.setOnClickListener(view -> {
+
             String text = editText.getText().toString();
             String fileName = text.substring(text.lastIndexOf('/') + 1);
 
-            DownloadTask downloadTask = new DownloadTask(MainActivity.this, fileName);
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage(fileName);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setCancelable(true);
+
+            DownloadTask downloadTask = new DownloadTask(MainActivity.this, fileName, progressDialog);
             downloadTask.execute(editText.getText().toString());
+
+            progressDialog.setOnCancelListener(dialogInterface -> {
+                downloadTask.cancel(true);
+            });
+
         });
 
         /*btn1.setOnClickListener(view -> {

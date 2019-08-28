@@ -20,15 +20,10 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
     private ProgressDialog progressDialog;
     private String fileName;
 
-    public DownloadTask(Context context, String fileName) {
+    public DownloadTask(Context context, String fileName, ProgressDialog progressDialog) {
         this.context = context;
         this.fileName = fileName;
-
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage(fileName);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(true);
+        this.progressDialog = progressDialog;
     }
 
 
