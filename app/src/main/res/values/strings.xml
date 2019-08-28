@@ -6,4 +6,5 @@
     <string name="fragmentTwo">Fragment Two</string>
     <string name="fragmentOne">fragmentOne</string>
     <string name="fragmentThree">Fragment Three</string>
+    <string name="input_url">input Url</string>
 </resources>
