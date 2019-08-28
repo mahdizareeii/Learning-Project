@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,8 +21,12 @@ public class MainActivity extends AppCompatActivity {
         btn1 = findViewById(R.id.btnOne);
         editText = findViewById(R.id.edtUrl);
 
+
         btn1.setOnClickListener(view -> {
-            DownloadTask downloadTask = new DownloadTask(MainActivity.this);
+            String text = editText.getText().toString();
+            String fileName = text.substring(text.lastIndexOf('/') + 1);
+
+            DownloadTask downloadTask = new DownloadTask(MainActivity.this, fileName);
             downloadTask.execute(editText.getText().toString());
         });
 

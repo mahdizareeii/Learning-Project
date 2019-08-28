@@ -3,11 +3,9 @@ package com.example.myapplication.Utils;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.os.PowerManager;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,23 +17,34 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
 
     private Context context;
     private PowerManager.WakeLock wakeLock;
-    private ProgressDialog mProgressDialog;
-    private File direction = Environment.getExternalStorageDirectory();
+    private ProgressDialog progressDialog;
+    private String fileName;
 
-    public DownloadTask(Context context, String message) {
+    public DownloadTask(Context context, String fileName) {
         this.context = context;
+        this.fileName = fileName;
 
-        mProgressDialog = new ProgressDialog(context);
-        mProgressDialog.setMessage(message);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgressDialog.setCancelable(true);
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage(fileName);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(true);
     }
+
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
+        wakeLock.acquire(10 * 60 * 1000L /*10 minutes*/);
+        progressDialog.show();
+    }
+
 
     @Override
     protected String doInBackground(String... urls) {
-
-        makeDirs();
 
         InputStream inputStream = null;
         OutputStream outputStream = null;
@@ -56,7 +65,7 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
 
             inputStream = httpURLConnection.getInputStream();
 
-            outputStream = new FileOutputStream("/sdcard/hello.zip");
+            outputStream = new FileOutputStream("/sdcard/" + fileName);
 
             byte[] data = new byte[4096];
 
@@ -104,37 +113,21 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
     }
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-
-        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
-        wakeLock.acquire(10 * 60 * 1000L /*10 minutes*/);
-        mProgressDialog.show();
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setMax(100);
+        progressDialog.setProgress(values[0]);
     }
 
     @Override
     protected void onPostExecute(String s) {
         wakeLock.release();
-        mProgressDialog.dismiss();
+        progressDialog.dismiss();
         if (s != null)
             Toast.makeText(context, "Download Failed : " + s, Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(context, "File Downloaded", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    protected void onProgressUpdate(Integer... values) {
-        super.onProgressUpdate(values);
-        mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setMax(100);
-        mProgressDialog.setProgress(values[0]);
-    }
-
-    private void makeDirs() {
-        File file = new File(direction + "/idm");
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-    }
 }
