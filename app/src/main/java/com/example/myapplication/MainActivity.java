@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import com.example.myapplication.Retrofit.RetrofitHelper;
 import com.example.myapplication.Utils.DownloadFileAsyncTask.DownloadTask;
 import com.example.myapplication.Utils.DownloadFileService.DownloadFileService;
 import com.example.myapplication.Utils.DownloadFileService.DownloadReceiver;
+import com.example.myapplication.Utils.NotificationBuilder;
 
 import java.util.List;
 
@@ -28,13 +30,17 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         btn1 = findViewById(R.id.btnOne);
         editText = findViewById(R.id.edtUrl);
 
 
         btn1.setOnClickListener(view -> {
 
-            downloadFileWithService(editText.getText().toString());
+            //downloadFileWithService(editText.getText().toString());
+
+            showNotification(this);
+
         });
 
     }
@@ -92,4 +98,16 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
             progressDialog.dismiss();
         }
     }
+
+    private void showNotification(Context context) {
+        NotificationBuilder notificationBuilder = new NotificationBuilder(context)
+                .setTitle("asdasd")
+                .setText("asdasdasd")
+                .setChannelId("a")
+                .setIcon(R.drawable.ic_launcher_background)
+                .build();
+
+    }
+
+
 }
