@@ -22,6 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <service android:name=".Utils.DownloadFileService.DownloadFileService" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
