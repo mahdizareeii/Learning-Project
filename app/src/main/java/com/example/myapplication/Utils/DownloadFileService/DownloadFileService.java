@@ -7,69 +7,91 @@ import android.os.ResultReceiver;
 
 import androidx.annotation.Nullable;
 
-import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Objects;
 
 public class DownloadFileService extends IntentService {
 
-    public static final int PROGRESS_UPDATE = 1642;
+    public static final int PROGRESS_UPDATE = 8344;
 
     public DownloadFileService() {
-        super("DownloadService");
+        super("DownloadFileService");
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
-        String urlToDownload = Objects.requireNonNull(intent).getStringExtra("url");
-        ResultReceiver resultReceiver = intent.getParcelableExtra("receiver");
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        HttpURLConnection httpURLConnection = null;
 
         try {
-            URL url = new URL(urlToDownload);
-            URLConnection urlConnection = url.openConnection();
-            urlConnection.connect();
 
-            int fileLength = urlConnection.getContentLength();
+            URL url = new URL(Objects.requireNonNull(intent).getStringExtra("url"));
+            ResultReceiver resultReceiver = intent.getParcelableExtra("receiver");
 
-            InputStream inputStream = new BufferedInputStream(urlConnection.getInputStream());
+            httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.connect();
 
-            String path = "/sdcard/" + intent.getStringExtra("fileName");
-            OutputStream outputStream = new FileOutputStream(path);
+            if (httpURLConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                System.out.println("Server returned HTTP " + httpURLConnection.getResponseCode() +
+                        httpURLConnection.getResponseMessage());
+            }
 
-            byte[] data = new byte[1024];
+            int fileLength = httpURLConnection.getContentLength();
+
+            inputStream = httpURLConnection.getInputStream();
+
+            outputStream = new FileOutputStream("/sdcard/" + intent.getStringExtra("fileName"));
+
+            byte[] data = new byte[4096];
+
             long total = 0;
+
             int count;
 
             while ((count = inputStream.read(data)) != -1) {
 
                 total += count;
-                Bundle resultData = new Bundle();
-                resultData.putInt("progress", (int) (total * 100 / fileLength));
-                Objects.requireNonNull(resultReceiver).send(PROGRESS_UPDATE, resultData);
+
+                if (fileLength > 0) {
+                    Bundle resultData = new Bundle();
+                    resultData.putInt("progress", (int) (total * 100 / fileLength));
+                    Objects.requireNonNull(resultReceiver).send(PROGRESS_UPDATE, resultData);
+                }
+
                 outputStream.write(data, 0, count);
 
             }
 
-            outputStream.flush();
-            outputStream.close();
-            inputStream.close();
+            Bundle resultData = new Bundle();
+            resultData.putInt("progress", 100);
+            Objects.requireNonNull(resultReceiver).send(PROGRESS_UPDATE, resultData);
 
-        } catch (MalformedURLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } finally {
+            try {
+
+                if (outputStream != null)
+                    outputStream.close();
+
+                if (inputStream != null)
+                    inputStream.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (httpURLConnection != null)
+                httpURLConnection.disconnect();
+
         }
-
-        Bundle resultData = new Bundle();
-        resultData.putInt("progress", 100);
-        Objects.requireNonNull(resultReceiver).send(PROGRESS_UPDATE, resultData);
 
     }
 }

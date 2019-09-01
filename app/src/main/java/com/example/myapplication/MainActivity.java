@@ -13,8 +13,6 @@ import com.example.myapplication.Interfaces.OnProgressListener;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.Retrofit.RetrofitHelper;
 import com.example.myapplication.Utils.DownloadFileAsyncTask.DownloadTask;
-import com.example.myapplication.Utils.DownloadFileService.DownloadReceiver;
-import com.example.myapplication.Utils.DownloadFileService.DownloadFileService;
 
 import java.util.List;
 
@@ -35,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
         btn1.setOnClickListener(view -> {
 
             downloadFileWithService(editText.getText().toString());
-
         });
 
     }
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
         intent.putExtra("fileName", fileName);
         intent.putExtra("receiver", new DownloadReceiver(new Handler(), progressDialog));
 
-
+        startService(intent);
     }
 
     private void downloadFileWithAsyncTask(String url) {
