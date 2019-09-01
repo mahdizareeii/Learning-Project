@@ -1,4 +1,4 @@
-package com.example.myapplication.Utils;
+package com.example.myapplication.Utils.DownloadFileAsyncTask;
 
 import android.app.ProgressDialog;
 import android.content.Context;
