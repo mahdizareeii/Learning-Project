@@ -13,6 +13,8 @@ import com.example.myapplication.Interfaces.OnProgressListener;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.Retrofit.RetrofitHelper;
 import com.example.myapplication.Utils.DownloadFileAsyncTask.DownloadTask;
+import com.example.myapplication.Utils.DownloadFileService.DownloadFileService;
+import com.example.myapplication.Utils.DownloadFileService.DownloadReceiver;
 
 import java.util.List;
 
