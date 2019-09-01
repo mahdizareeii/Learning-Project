@@ -1,4 +1,4 @@
-package com.example.myapplication.Utils.DownloadFileService;
+package com.example.myapplication.Utils.DownloadFile.DownloadFileService;
 
 import android.app.IntentService;
 import android.content.Intent;

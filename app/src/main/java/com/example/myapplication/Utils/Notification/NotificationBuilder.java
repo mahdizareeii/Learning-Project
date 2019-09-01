@@ -1,11 +1,14 @@
-package com.example.myapplication.Utils;
+package com.example.myapplication.Utils.Notification;
 
 import android.app.Notification;
 import android.content.Context;
+import android.widget.RemoteViews;
 
 import androidx.annotation.DrawableRes;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import com.example.myapplication.R;
 
 public class NotificationBuilder {
 

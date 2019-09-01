@@ -13,10 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.myapplication.Interfaces.OnProgressListener;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.Retrofit.RetrofitHelper;
-import com.example.myapplication.Utils.DownloadFileAsyncTask.DownloadTask;
-import com.example.myapplication.Utils.DownloadFileService.DownloadFileService;
-import com.example.myapplication.Utils.DownloadFileService.DownloadReceiver;
-import com.example.myapplication.Utils.NotificationBuilder;
+import com.example.myapplication.Utils.DownloadFile.DownloadFileAsyncTask.DownloadTask;
+import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadFileService;
+import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadReceiver;
+import com.example.myapplication.Utils.Notification.NotificationBuilder;
 
 import java.util.List;
 
@@ -37,9 +37,7 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
 
         btn1.setOnClickListener(view -> {
 
-            //downloadFileWithService(editText.getText().toString());
-
-            showNotification(this);
+            downloadFileWithService(editText.getText().toString());
 
         });
 
@@ -48,17 +46,10 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
     private void downloadFileWithService(String url) {
         String fileName = url.substring(url.lastIndexOf('/') + 1);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(fileName);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(true);
-        progressDialog.show();
-
         Intent intent = new Intent(this, DownloadFileService.class);
         intent.putExtra("url", url);
         intent.putExtra("fileName", fileName);
-        intent.putExtra("receiver", new DownloadReceiver(new Handler(), progressDialog));
+        intent.putExtra("receiver", new DownloadReceiver(this, new Handler()));
 
         startService(intent);
     }
@@ -100,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
     }
 
     private void showNotification(Context context) {
+
         NotificationBuilder notificationBuilder = new NotificationBuilder(context)
                 .setTitle("asdasd")
                 .setText("asdasdasd")
