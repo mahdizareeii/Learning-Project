@@ -29,7 +29,7 @@ public class DownloadReceiver extends ResultReceiver {
             if (progress != lastProgress) {
                 customNotificationBuilder
                         .setChannelId("n")
-                        .setIcon(R.drawable.ic_launcher_background)
+                        .setIcon(R.drawable.notification)
                         .setTitle("Downloading")
                         .setText("File")
                         .setProgress(progress).build();
