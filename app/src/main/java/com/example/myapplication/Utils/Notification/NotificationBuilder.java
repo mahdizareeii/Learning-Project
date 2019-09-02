@@ -1,14 +1,10 @@
 package com.example.myapplication.Utils.Notification;
 
-import android.app.Notification;
 import android.content.Context;
-import android.widget.RemoteViews;
 
 import androidx.annotation.DrawableRes;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
-import com.example.myapplication.R;
 
 public class NotificationBuilder {
 
@@ -18,20 +14,25 @@ public class NotificationBuilder {
     private String text;
     private String channelId;
 
+    //
+    private NotificationManagerCompat notificationManagerCompat;
+
+
     public NotificationBuilder(Context context) {
         this.context = context;
+        notificationManagerCompat = NotificationManagerCompat.from(context);
     }
 
     private void showNotification(@DrawableRes int icon, String title, String text, String channelId) {
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
 
-        Notification notification = new NotificationCompat.Builder(context, channelId)
-                .setContentTitle(title)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
+        builder.setContentTitle(title)
                 .setContentText(text)
                 .setSmallIcon(icon)
-                .build();
+                .setPriority(NotificationCompat.PRIORITY_LOW);
 
-        notificationManagerCompat.notify(1, notification);
+
+        notificationManagerCompat.notify(1, builder.build());
     }
 
     public NotificationBuilder setIcon(@DrawableRes int icon) {

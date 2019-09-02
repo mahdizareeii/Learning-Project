@@ -1,6 +1,5 @@
 package com.example.myapplication.Utils.DownloadFile.DownloadFileService;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,14 +7,17 @@ import android.os.ResultReceiver;
 
 import com.example.myapplication.R;
 import com.example.myapplication.Utils.Notification.CustomNotificationBuilder;
+import com.example.myapplication.Utils.Notification.NotificationBuilder;
 
 public class DownloadReceiver extends ResultReceiver {
 
-    private Context context;
+    private CustomNotificationBuilder customNotificationBuilder;
+    private int lastProgress = -1;
+
 
     public DownloadReceiver(Context context, Handler handler) {
         super(handler);
-        this.context = context;
+        customNotificationBuilder = new CustomNotificationBuilder(context);
     }
 
     @Override
@@ -24,13 +26,15 @@ public class DownloadReceiver extends ResultReceiver {
 
         if (resultCode == DownloadFileService.PROGRESS_UPDATE) {
             int progress = resultData.getInt("progress");
-            new CustomNotificationBuilder(context)
-                    .setChannelId("id")
-                    .setTitle("Downloading")
-                    .setText("klasdklaskd")
-                    .setProgress(progress)
-                    .build();
+            if (progress != lastProgress) {
+                customNotificationBuilder
+                        .setChannelId("n")
+                        .setIcon(R.drawable.ic_launcher_background)
+                        .setTitle("Downloading")
+                        .setText("File")
+                        .setProgress(progress).build();
+                lastProgress = progress;
+            }
         }
-
     }
 }

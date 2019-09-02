@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
         btn1.setOnClickListener(view -> {
 
             downloadFileWithService(editText.getText().toString());
-
         });
 
     }

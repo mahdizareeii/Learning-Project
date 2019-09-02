@@ -1,14 +1,10 @@
 package com.example.myapplication.Utils.Notification;
 
-import android.app.Notification;
 import android.content.Context;
-import android.widget.RemoteViews;
 
 import androidx.annotation.DrawableRes;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-
-import com.example.myapplication.R;
 
 public class CustomNotificationBuilder {
 
@@ -25,29 +21,29 @@ public class CustomNotificationBuilder {
 
     private int progress;
 
+    //
+    private NotificationManagerCompat notificationManagerCompat;
+
+
     public CustomNotificationBuilder(Context context) {
         this.context = context;
+        notificationManagerCompat = NotificationManagerCompat.from(context);
     }
 
     private void showCustomNotificationBuilder(@DrawableRes int icon, String title, String text, String channelId, int progress) {
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification);
-
-        remoteViews.setProgressBar(R.id.progressBar, 100, progress, false);
-
-        Notification notification = new NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(icon)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
+        builder.setSmallIcon(icon)
                 .setContentTitle(title)
                 .setContentText(text)
-                .setCustomContentView(remoteViews)
-                .setCustomBigContentView(remoteViews)
-                //.setCustomBigContentView()
-                .build();
+                .setPriority(NotificationCompat.PRIORITY_LOW);
 
-        notificationManagerCompat.notify(1, notification);
+        builder.setProgress(100, progress, false);
+        notificationManagerCompat.notify(1, builder.build());
 
+        if (progress == 100) {
+            builder.setContentText("Download Complete").setProgress(0, 0, false);
+            notificationManagerCompat.notify(1, builder.build());
+        }
     }
 
     public CustomNotificationBuilder setIcon(@DrawableRes int icon) {
