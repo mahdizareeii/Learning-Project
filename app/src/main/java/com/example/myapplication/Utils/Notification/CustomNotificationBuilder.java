@@ -33,6 +33,7 @@ public class CustomNotificationBuilder {
     private void showCustomNotificationBuilder(@DrawableRes int icon, String title, String text, String channelId, int progress) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId);
         builder.setSmallIcon(icon)
+                .setChannelId(channelId)
                 .setContentTitle(title)
                 .setContentText(text)
                 .setPriority(NotificationCompat.PRIORITY_LOW);
