@@ -1,4 +1,4 @@
-package com.example.myapplication.JetPack;
+package com.example.myapplication.JetPack.ViewModel;
 
 import android.util.Log;
 

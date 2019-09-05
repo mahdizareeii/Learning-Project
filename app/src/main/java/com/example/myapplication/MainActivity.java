@@ -10,10 +10,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.myapplication.Interfaces.OnProgressListener;
-import com.example.myapplication.JetPack.GetNumberViewModel;
+import com.example.myapplication.JetPack.LiveData.GetNumberLiveData;
+import com.example.myapplication.JetPack.ViewModel.GetNumberViewModel;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.Retrofit.RetrofitHelper;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileAsyncTask.DownloadTask;
@@ -23,7 +25,7 @@ import com.example.myapplication.Utils.Notification.NotificationBuilder;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private Button btn1;
     private EditText editText;
@@ -38,18 +40,39 @@ public class MainActivity extends AppCompatActivity{
         editText = findViewById(R.id.edtUrl);
 
         btn1.setOnClickListener(view -> {
-
+            setNumberLiveData();
+            getNumberLiveData();
         });
 
     }
 
-    private void getNumber() {
 
-        GetNumberViewModel getNumberViewModel = ViewModelProviders.of(this).get(GetNumberViewModel.class);
-        Toast.makeText(this, getNumberViewModel.getNumber(), Toast.LENGTH_SHORT).show();
+    //******************** Jet Pack
+    private void getNumberLiveData() {
+        GetNumberLiveData getNumberLiveData = ViewModelProviders.of(this).get(GetNumberLiveData.class);
+        LiveData<String> getNumber = getNumberLiveData.getNumber();
 
+        getNumber.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+    private void setNumberLiveData() {
+        GetNumberLiveData getNumberLiveData = ViewModelProviders.of(this).get(GetNumberLiveData.class);
+        getNumberLiveData.setNumber();
+    }
+
+    private void getNumber() {
+        GetNumberViewModel getNumberViewModel = ViewModelProviders.of(this).get(GetNumberViewModel.class);
+        Toast.makeText(this, getNumberViewModel.getNumber(), Toast.LENGTH_SHORT).show();
+    }
+    //******************** /Jet Pack
+
+
+    //******************** DownloadFile
     private void downloadFileWithService(String url) {
         String fileName = url.substring(url.lastIndexOf('/') + 1);
 
@@ -78,7 +101,10 @@ public class MainActivity extends AppCompatActivity{
         });
 
     }
+    //******************** /DownloadFile
 
+
+    //******************** Retrofit
     private void sendRequestToServer() {
         RetrofitHelper helper = new RetrofitHelper(this, MainActivity.this::onCallBackComplete);
         helper.getData("getPosts.php");
@@ -87,17 +113,7 @@ public class MainActivity extends AppCompatActivity{
     private void onCallBackComplete(Object response) {
         List<ItemResult> list = (List<ItemResult>) response;
     }
-
-    private void showNotification(Context context) {
-
-        NotificationBuilder notificationBuilder = new NotificationBuilder(context)
-                .setTitle("asdasd")
-                .setText("asdasdasd")
-                .setChannelId("a")
-                .setIcon(R.drawable.ic_launcher_background)
-                .build();
-
-    }
+    //******************** /Retrofit
 
 
 }
