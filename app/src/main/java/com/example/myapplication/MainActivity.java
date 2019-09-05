@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.myapplication.Interfaces.OnProgressListener;
+import com.example.myapplication.JetPack.GetNumberViewModel;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.Retrofit.RetrofitHelper;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileAsyncTask.DownloadTask;
@@ -20,7 +23,7 @@ import com.example.myapplication.Utils.Notification.NotificationBuilder;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OnProgressListener {
+public class MainActivity extends AppCompatActivity{
 
     private Button btn1;
     private EditText editText;
@@ -34,11 +37,16 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
         btn1 = findViewById(R.id.btnOne);
         editText = findViewById(R.id.edtUrl);
 
-
         btn1.setOnClickListener(view -> {
 
-            downloadFileWithService(editText.getText().toString());
         });
+
+    }
+
+    private void getNumber() {
+
+        GetNumberViewModel getNumberViewModel = ViewModelProviders.of(this).get(GetNumberViewModel.class);
+        Toast.makeText(this, getNumberViewModel.getNumber(), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -78,15 +86,6 @@ public class MainActivity extends AppCompatActivity implements OnProgressListene
 
     private void onCallBackComplete(Object response) {
         List<ItemResult> list = (List<ItemResult>) response;
-    }
-
-    @Override
-    public void onProgress(Object progress) {
-        int value = (int) progress;
-        progressDialog.setProgress(value);
-        if (value == 100) {
-            progressDialog.dismiss();
-        }
     }
 
     private void showNotification(Context context) {
