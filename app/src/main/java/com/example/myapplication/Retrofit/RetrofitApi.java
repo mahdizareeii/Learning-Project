@@ -1,4 +1,4 @@
-package com.example.myapplication.Interfaces;
+package com.example.myapplication.Retrofit;
 
 import com.example.myapplication.Models.ItemData;
 

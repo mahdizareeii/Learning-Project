@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,19 +14,21 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.myapplication.JetPack.LiveData.GetNumberLiveData;
+import com.example.myapplication.JetPack.Room.Student;
+import com.example.myapplication.JetPack.Room.StudentInitializer;
 import com.example.myapplication.JetPack.ViewModel.GetNumberViewModel;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.Retrofit.RetrofitHelper;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileAsyncTask.DownloadTask;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadFileService;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadReceiver;
-import com.example.myapplication.Utils.Notification.NotificationBuilder;
 
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btn1;
+    private Button btn1, btnTwo;
     private EditText editText;
     private ProgressDialog progressDialog;
 
@@ -37,12 +38,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btn1 = findViewById(R.id.btnOne);
+        btnTwo = findViewById(R.id.btnTwo);
         editText = findViewById(R.id.edtUrl);
 
         btn1.setOnClickListener(view -> {
-            setNumberLiveData();
-            getNumberLiveData();
+            insertData(editText.getText().toString(), editText.getText().toString(), String.valueOf(new Random().nextInt(((1000 - 10) + 1) + 10)));
         });
+
+        getLiveDataFromDataBase();
+
 
     }
 
@@ -68,6 +72,23 @@ public class MainActivity extends AppCompatActivity {
     private void getNumber() {
         GetNumberViewModel getNumberViewModel = ViewModelProviders.of(this).get(GetNumberViewModel.class);
         Toast.makeText(this, getNumberViewModel.getNumber(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void insertData(String name, String lastName, String studentId) {
+        StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
+        studentInitializer.insertStudent(new Student(name, lastName, studentId));
+    }
+
+    private void getLiveDataFromDataBase() {
+        StudentInitializer studentInitializer = ViewModelProviders.of(MainActivity.this).get(StudentInitializer.class);
+        studentInitializer.getStudentListLiveData().observe(this, new Observer<List<Student>>() {
+            @Override
+            public void onChanged(List<Student> students) {
+                for (int i = 0; i < students.size(); i++) {
+                    Toast.makeText(MainActivity.this, students.get(i).getId() + " | " + students.get(i).getName() + " | " + students.get(i).getStudentId(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
     //******************** /Jet Pack
 

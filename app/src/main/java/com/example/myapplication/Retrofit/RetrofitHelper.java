@@ -6,7 +6,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.Interfaces.OnCallBackComplete;
-import com.example.myapplication.Interfaces.RetrofitApi;
 import com.example.myapplication.Models.ItemData;
 
 import retrofit2.Call;
