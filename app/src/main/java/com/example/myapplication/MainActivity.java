@@ -44,9 +44,8 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.edtUrl);
 
         btn1.setOnClickListener(view -> {
-            getStudentList();
+           getStudentByStudentId("256");
         });
-
 
 
     }
@@ -80,31 +79,6 @@ public class MainActivity extends AppCompatActivity {
         studentInitializer.insertStudent(new Student(name, lastName, studentId));
     }
 
-    private void getStudentListLiveData() {
-        StudentInitializer studentInitializer = ViewModelProviders.of(MainActivity.this).get(StudentInitializer.class);
-        studentInitializer.getStudentListLiveData().observe(this, new Observer<List<Student>>() {
-            @Override
-            public void onChanged(List<Student> students) {
-                for (int i = 0; i < students.size(); i++) {
-                    Toast.makeText(MainActivity.this, students.get(i).getId() + " | " + students.get(i).getId() + " | " + students.get(i).getName() + " | " + students.get(i).getStudentId(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    private void getUserById(int id) {
-        StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
-        String name = null;
-        try {
-            name = studentInitializer.getStudentById(1).getName();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
-    }
-
     private void getStudentList() {
         StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
         List<Student> list = null;
@@ -120,6 +94,44 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, list.get(i).getName(), Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void getStudentListLiveData() {
+        StudentInitializer studentInitializer = ViewModelProviders.of(MainActivity.this).get(StudentInitializer.class);
+        studentInitializer.getStudentListLiveData().observe(this, new Observer<List<Student>>() {
+            @Override
+            public void onChanged(List<Student> students) {
+                for (int i = 0; i < students.size(); i++) {
+                    Toast.makeText(MainActivity.this, students.get(i).getId() + " | " + students.get(i).getId() + " | " + students.get(i).getName() + " | " + students.get(i).getStudentId(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void getStudentById(int id) {
+        StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
+        String name = null;
+        try {
+            name = studentInitializer.getStudentById(1).getName();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+    }
+
+    private void getStudentByStudentId(String id) {
+        StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
+        String name = null;
+        try {
+            name = studentInitializer.getStudentByStudentId(id).getName();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
     }
     //******************** /Jet Pack
 

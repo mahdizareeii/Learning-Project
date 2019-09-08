@@ -20,16 +20,16 @@ public interface StudentDao {
     List<Student> getAllStudent();
 
     @Query("SELECT * FROM tbl_student WHERE id=:id")
-    Student getUserById(int id);
+    Student getStudentById(int id);
 
     @Query("SELECT * FROM tbl_student WHERE student_id=:studentId")
-    Student getUserByStudentId(String studentId);
+    Student getStudentByStudentId(String studentId);
 
     @Query("SELECT * FROM tbl_student WHERE name=:name")
-    List<Student> getUserByName(String name);
+    List<Student> getStudentByName(String name);
 
     @Query("SELECT * FROM tbl_student WHERE last_name=:lastName")
-    List<Student> getUserByLastName(String lastName);
+    List<Student> getStudentByLastName(String lastName);
     //Queries
 
     @Insert

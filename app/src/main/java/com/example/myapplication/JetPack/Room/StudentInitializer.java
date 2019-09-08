@@ -43,7 +43,7 @@ public class StudentInitializer extends AndroidViewModel {
         return (Student) roomAsyncTask.get();
     }
 
-    public Student getUserByStudentId(String id) throws ExecutionException, InterruptedException {
+    public Student getStudentByStudentId(String id) throws ExecutionException, InterruptedException {
         roomAsyncTask = new RoomAsyncTask(studentDao, RoomAsyncTaskType.GETObjectByStudentId);
         roomAsyncTask.execute(id);
         return (Student) roomAsyncTask.get();

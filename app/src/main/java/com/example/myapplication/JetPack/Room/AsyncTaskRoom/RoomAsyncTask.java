@@ -20,7 +20,10 @@ public class RoomAsyncTask extends AsyncTask<Object, Void, Object> {
         switch (asyncType) {
 
             case GETObjectById:
-                return studentDao.getUserById((int) objects[0]);
+                return studentDao.getStudentById((int) objects[0]);
+
+            case GETObjectByStudentId:
+                return studentDao.getStudentByStudentId((String) objects[0]);
 
             case GETList:
                 return studentDao.getAllStudent();
