@@ -5,8 +5,8 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.myapplication.JetPack.Room.AsyncTaskRoom.GetUserAsyncTask;
-import com.example.myapplication.JetPack.Room.AsyncTaskRoom.InsertUserAsyncTask;
+import com.example.myapplication.JetPack.Room.AsyncTaskRoom.RoomAsyncTask;
+import com.example.myapplication.JetPack.Room.AsyncTaskRoom.RoomAsyncTaskType;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -18,36 +18,42 @@ public class StudentInitializer extends AndroidViewModel {
 
     private static final String TAG = StudentInitializer.class.getName();
     private StudentDao studentDao;
+    private RoomAsyncTask roomAsyncTask;
 
     public StudentInitializer(Application application) {
         super(application);
         studentDao = StudentDataBase.getInstance(application.getApplicationContext()).getStudentDao();
     }
 
+    //get
+
     public LiveData<List<Student>> getStudentListLiveData() {
-        //return LiveData<List<Student>>
         return studentDao.getAllStudentLiveData();
     }
 
-    public Student getStudentById(int id) {
-        GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(studentDao);
-        getUserAsyncTask.execute(id);
-        try {
-            return getUserAsyncTask.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public List<Student> getStudentList() throws ExecutionException, InterruptedException {
+        RoomAsyncTask getAllUserAsyncTask = new RoomAsyncTask(studentDao, RoomAsyncTaskType.GETList);
+        getAllUserAsyncTask.execute();
+        return (List<Student>) getAllUserAsyncTask.get();
     }
 
-    public Student getUserByStudentId(String id) {
-        return studentDao.getUserByStudentId(id);
+    public Student getStudentById(int id) throws ExecutionException, InterruptedException {
+        roomAsyncTask = new RoomAsyncTask(studentDao, RoomAsyncTaskType.GETObjectById);
+        roomAsyncTask.execute(id);
+        return (Student) roomAsyncTask.get();
     }
+
+    public Student getUserByStudentId(String id) throws ExecutionException, InterruptedException {
+        roomAsyncTask = new RoomAsyncTask(studentDao, RoomAsyncTaskType.GETObjectByStudentId);
+        roomAsyncTask.execute(id);
+        return (Student) roomAsyncTask.get();
+    }
+
+    //insert
 
     public void insertStudent(Student student) {
-        new InsertUserAsyncTask(studentDao).execute(student);
+        roomAsyncTask = new RoomAsyncTask(studentDao, RoomAsyncTaskType.INSERTObject);
+        roomAsyncTask.execute(student);
     }
 
 }

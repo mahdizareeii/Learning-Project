@@ -2,8 +2,10 @@ package com.example.myapplication;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -24,7 +26,7 @@ import com.example.myapplication.Utils.DownloadFile.DownloadFileService.Download
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadReceiver;
 
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.edtUrl);
 
         btn1.setOnClickListener(view -> {
-
+            getStudentList();
         });
+
 
 
     }
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         studentInitializer.insertStudent(new Student(name, lastName, studentId));
     }
 
-    private void getLiveDataFromDataBase() {
+    private void getStudentListLiveData() {
         StudentInitializer studentInitializer = ViewModelProviders.of(MainActivity.this).get(StudentInitializer.class);
         studentInitializer.getStudentListLiveData().observe(this, new Observer<List<Student>>() {
             @Override
@@ -91,8 +94,32 @@ public class MainActivity extends AppCompatActivity {
 
     private void getUserById(int id) {
         StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
-        String name = studentInitializer.getStudentById(1).getName();
+        String name = null;
+        try {
+            name = studentInitializer.getStudentById(1).getName();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+    }
+
+    private void getStudentList() {
+        StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
+        List<Student> list = null;
+        try {
+            list = studentInitializer.getStudentList();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                Toast.makeText(this, list.get(i).getName(), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
     //******************** /Jet Pack
 
