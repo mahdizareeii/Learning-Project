@@ -42,10 +42,8 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.edtUrl);
 
         btn1.setOnClickListener(view -> {
-            insertData(editText.getText().toString(), editText.getText().toString(), String.valueOf(new Random().nextInt(((1000 - 10) + 1) + 10)));
-        });
 
-        getLiveDataFromDataBase();
+        });
 
 
     }
@@ -85,10 +83,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Student> students) {
                 for (int i = 0; i < students.size(); i++) {
-                    Toast.makeText(MainActivity.this, students.get(i).getId() + " | " + students.get(i).getName() + " | " + students.get(i).getStudentId(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, students.get(i).getId() + " | " + students.get(i).getId() + " | " + students.get(i).getName() + " | " + students.get(i).getStudentId(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private void getUserById(int id) {
+        StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
+        String name = studentInitializer.getStudentById(1).getName();
+        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
     }
     //******************** /Jet Pack
 

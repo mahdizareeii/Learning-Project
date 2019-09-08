@@ -21,6 +21,8 @@ public abstract class StudentDataBase extends RoomDatabase {
 
     private static StudentDataBase create(Context context) {
         return Room.databaseBuilder(context, StudentDataBase.class, DB_NAME).build();
+        //return Room.databaseBuilder(context, StudentDataBase.class, DB_NAME).allowMainThreadQueries().build();
+        //the return can be above code but not correct
     }
 
     public abstract StudentDao getStudentDao();

@@ -20,10 +20,10 @@ public interface StudentDao {
     List<Student> getAllStudent();
 
     @Query("SELECT * FROM tbl_student WHERE id=:id")
-    List<Student> getUserById(int id);
+    Student getUserById(int id);
 
     @Query("SELECT * FROM tbl_student WHERE student_id=:studentId")
-    List<Student> getUserByStudentId(int studentId);
+    Student getUserByStudentId(String studentId);
 
     @Query("SELECT * FROM tbl_student WHERE name=:name")
     List<Student> getUserByName(String name);

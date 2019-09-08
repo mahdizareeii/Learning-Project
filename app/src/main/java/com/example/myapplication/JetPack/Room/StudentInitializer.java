@@ -1,12 +1,15 @@
 package com.example.myapplication.JetPack.Room;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.myapplication.JetPack.Room.AsyncTaskRoom.GetUserAsyncTask;
+import com.example.myapplication.JetPack.Room.AsyncTaskRoom.InsertUserAsyncTask;
+
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class StudentInitializer extends AndroidViewModel {
     //we can't use ViewModel because ViewModel can not have constructor and context
@@ -26,23 +29,25 @@ public class StudentInitializer extends AndroidViewModel {
         return studentDao.getAllStudentLiveData();
     }
 
-    public void insertStudent(Student student) {
-        new InsertAsyncTask(studentDao).execute(student);
+    public Student getStudentById(int id) {
+        GetUserAsyncTask getUserAsyncTask = new GetUserAsyncTask(studentDao);
+        getUserAsyncTask.execute(id);
+        try {
+            return getUserAsyncTask.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public class InsertAsyncTask extends AsyncTask<Student, Void, Void> {
+    public Student getUserByStudentId(String id) {
+        return studentDao.getUserByStudentId(id);
+    }
 
-        private StudentDao studentDao;
-
-        private InsertAsyncTask(StudentDao studentDao) {
-            this.studentDao = studentDao;
-        }
-
-        @Override
-        protected Void doInBackground(Student... students) {
-            studentDao.insertStudent(students[0]);
-            return null;
-        }
+    public void insertStudent(Student student) {
+        new InsertUserAsyncTask(studentDao).execute(student);
     }
 
 }
