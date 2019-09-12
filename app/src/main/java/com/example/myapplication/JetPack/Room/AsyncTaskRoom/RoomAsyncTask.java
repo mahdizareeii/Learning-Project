@@ -33,6 +33,12 @@ public class RoomAsyncTask extends AsyncTask<Object, Void, Object> {
 
             case INSERTObject:
                 studentDao.insertStudent((Student) objects[0]);
+
+            case UPDATEName:
+                studentDao.updateStudent((Student) objects[0]);
+
+            case DELETEStudent:
+                studentDao.deleteStudent((Student) objects[0]);
         }
         return null;
     }

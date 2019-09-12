@@ -56,4 +56,18 @@ public class StudentInitializer extends AndroidViewModel {
         roomAsyncTask.execute(student);
     }
 
+    //update
+
+    public void updateStudentName(Object object) {
+        roomAsyncTask = new RoomAsyncTask(studentDao, RoomAsyncTaskType.UPDATEName);
+        roomAsyncTask.execute(object);
+    }
+
+    //delete
+
+    public void deleteStudent(Student student) {
+        roomAsyncTask = new RoomAsyncTask(studentDao, RoomAsyncTaskType.DELETEStudent);
+        roomAsyncTask.execute(student);
+    }
+
 }

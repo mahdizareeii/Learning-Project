@@ -44,10 +44,12 @@ public class MainActivity extends AppCompatActivity {
         editText = findViewById(R.id.edtUrl);
 
         btn1.setOnClickListener(view -> {
-           getStudentByStudentId("256");
+            getStudentByStudentId("256");
         });
 
-
+        btnTwo.setOnClickListener(view -> {
+            updateStudent(4, editText.getText().toString());
+        });
     }
 
 
@@ -123,15 +125,37 @@ public class MainActivity extends AppCompatActivity {
 
     private void getStudentByStudentId(String id) {
         StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
+        int pid = 0;
         String name = null;
         try {
             name = studentInitializer.getStudentByStudentId(id).getName();
+            pid = studentInitializer.getStudentByStudentId(id).getId();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, pid + name, Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateStudent(int id, String name) {
+        StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
+
+        Student student = new Student(name, "amir", "256");
+        student.setId(id);
+
+        studentInitializer.updateStudentName(student);
+    }
+
+    private void deleteStudent(int id) {
+        StudentInitializer studentInitializer = ViewModelProviders.of(this).get(StudentInitializer.class);
+        try {
+            studentInitializer.deleteStudent(studentInitializer.getStudentById(id));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     //******************** /Jet Pack
 

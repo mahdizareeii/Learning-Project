@@ -5,5 +5,7 @@ public enum RoomAsyncTaskType {
     GETList,
     GETObjectById,
     GETObjectByStudentId,
-    INSERTObject
+    INSERTObject,
+    UPDATEName,
+    DELETEStudent
 }
