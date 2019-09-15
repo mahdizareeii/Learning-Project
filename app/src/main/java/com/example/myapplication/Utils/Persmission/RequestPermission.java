@@ -16,12 +16,15 @@ public class RequestPermission {
     }
 
     public void checkPermission(@NonNull String[] permission, int requestCode) {
+
         StringBuilder a = new StringBuilder();
         a.append("1");
+
         for (String s : permission)
             if (ContextCompat.checkSelfPermission(appCompatActivity, s) != PackageManager.PERMISSION_GRANTED) {
                 a.append("0");
             }
+        // if any permission not granted,start request permission
         if (a.toString().contains("0")) {
             requestPermission(permission, requestCode);
         }
