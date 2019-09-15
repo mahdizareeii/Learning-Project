@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -19,14 +21,16 @@ import com.example.myapplication.JetPack.Room.StudentInitializer;
 import com.example.myapplication.JetPack.ViewModel.GetNumberViewModel;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.Retrofit.RetrofitHelper;
+import com.example.myapplication.Utils.BaseActivity;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileAsyncTask.DownloadTask;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadFileService;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadReceiver;
+import com.example.myapplication.Utils.Persmission.RequestPermission;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private Button btn1, btnTwo;
     private EditText editText;
@@ -46,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnTwo.setOnClickListener(view -> {
-            updateStudent(4, editText.getText().toString());
+            checkPermission();
         });
     }
 
@@ -201,5 +205,12 @@ public class MainActivity extends AppCompatActivity {
     }
     //******************** /Retrofit
 
-
+    //******************** RequestPermission
+    private void checkPermission() {
+        new RequestPermission(this).checkPermission(new String[]{
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.RECORD_AUDIO}, 1);
+    }
+    //******************** /RequestPermission
 }
