@@ -33,4 +33,6 @@ public class RequestPermission {
     private void requestPermission(String[] permission, int requestCode) {
         ActivityCompat.requestPermissions(appCompatActivity, permission, requestCode);
     }
+
+    //on Request Permission Result is in BaseActivity
 }

@@ -211,6 +211,7 @@ public class MainActivity extends BaseActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.RECORD_AUDIO}, 1);
+        //on Request Permission Result is in BaseActivity
     }
     //******************** /RequestPermission
 }
