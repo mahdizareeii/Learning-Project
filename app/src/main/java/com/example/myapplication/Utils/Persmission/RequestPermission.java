@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.myapplication.Utils.BaseActivity;
 
-public class RequestPermission extends BaseActivity {
+public class RequestPermission {
     AppCompatActivity appCompatActivity;
 
     public RequestPermission(AppCompatActivity appCompatActivity) {
