@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 public class RequestPermission {
+
     private AppCompatActivity appCompatActivity;
 
     public RequestPermission(AppCompatActivity appCompatActivity) {
