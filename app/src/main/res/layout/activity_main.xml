@@ -9,25 +9,8 @@
     android:orientation="vertical"
     tools:context=".UI.Activities.MainActivity">
 
-    <EditText
-        android:id="@+id/edtUrl"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="10dp"
-        android:background="#fff"
-        android:hint="@string/input_url"
-        android:textAlignment="center" />
-
-    <Button
-        android:id="@+id/btnOne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/fragmentOne" />
-
-    <Button
-        android:id="@+id/btnTwo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/show" />
+        android:layout_height="match_parent" />
 </LinearLayout>

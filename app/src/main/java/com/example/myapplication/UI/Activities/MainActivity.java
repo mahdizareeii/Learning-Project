@@ -12,11 +12,16 @@ import android.widget.Toast;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.JetPack.LiveData.GetNumberLiveData;
 import com.example.myapplication.JetPack.Room.Student;
 import com.example.myapplication.JetPack.Room.StudentInitializer;
 import com.example.myapplication.JetPack.ViewModel.GetNumberViewModel;
+import com.example.myapplication.LazyLoad.Adapter.RVAdapter;
+import com.example.myapplication.LazyLoad.Inteface.ILoadMore;
+import com.example.myapplication.LazyLoad.Model.Item;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.R;
 import com.example.myapplication.Retrofit.RetrofitHelper;
@@ -25,33 +30,73 @@ import com.example.myapplication.Utils.DownloadFile.DownloadFileService.Download
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadReceiver;
 import com.example.myapplication.Utils.Persmission.RequestPermission;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends BaseActivity {
 
-    private Button btn1, btnTwo;
-    private EditText editText;
+    //for downloading
     private ProgressDialog progressDialog;
+
+    //for recyclerview
+    private List<Item> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btn1 = findViewById(R.id.btnOne);
-        btnTwo = findViewById(R.id.btnTwo);
-        editText = findViewById(R.id.edtUrl);
+        createRandomData();
+        setUpRecyclerView();
 
-        btn1.setOnClickListener(view -> {
-            getStudentByStudentId("256");
-        });
 
-        btnTwo.setOnClickListener(view -> {
-            checkPermission();
+    }
+
+    //******************** EndLess RecyclerView
+    private void setUpRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        RVAdapter adapter = new RVAdapter(recyclerView, this, list);
+        recyclerView.setAdapter(adapter);
+
+        adapter.setiLoadMore(new ILoadMore() {
+            @Override
+            public void onLoadMore() {
+                if (list.size() <= 20) {
+                    list.add(null);
+                    adapter.notifyDataSetChanged();
+                    new Handler().postDelayed(() -> {
+                        list.remove(list.size() - 1);
+                        adapter.notifyDataSetChanged();
+
+                        //Random more data
+                        int index = list.size();
+                        int end = index + 10;
+                        for (int i = index; i < end; i++) {
+                            String name = UUID.randomUUID().toString();
+                            Item item = new Item(name, name.length());
+                            list.add(i, item);
+                        }
+                        adapter.notifyDataSetChanged();
+                        adapter.setLoaded();
+
+                    }, 3000);
+                } else {
+                    Toast.makeText(MainActivity.this, "Load Completed", Toast.LENGTH_SHORT).show();
+                }
+            }
         });
     }
 
+    private void createRandomData() {
+        for (int i = 0; i < 10; i++) {
+            String name = UUID.randomUUID().toString();
+            Item item = new Item(name, name.length());
+            list.add(i, item);
+        }
+    }
 
     //******************** Jet Pack
     private void getNumberLiveData() {
