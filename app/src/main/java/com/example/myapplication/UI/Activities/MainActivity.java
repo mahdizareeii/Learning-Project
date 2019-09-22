@@ -48,7 +48,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        createRandomData();
         setUpRecyclerView();
 
 
@@ -58,13 +57,13 @@ public class MainActivity extends BaseActivity {
     private void setUpRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        RVAdapter adapter = new RVAdapter(recyclerView, this, list);
+        RVAdapter adapter = new RVAdapter(recyclerView, this, createRandomData());
         recyclerView.setAdapter(adapter);
 
         adapter.setiLoadMore(new ILoadMore() {
             @Override
             public void onLoadMore() {
-                if (list.size() <= 20) {
+                if (list.size() <= 100) {
                     list.add(null);
                     adapter.notifyDataSetChanged();
                     new Handler().postDelayed(() -> {
@@ -82,7 +81,7 @@ public class MainActivity extends BaseActivity {
                         adapter.notifyDataSetChanged();
                         adapter.setLoaded();
 
-                    }, 3000);
+                    }, 1000);
                 } else {
                     Toast.makeText(MainActivity.this, "Load Completed", Toast.LENGTH_SHORT).show();
                 }
@@ -90,12 +89,13 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void createRandomData() {
+    private List<Item> createRandomData() {
         for (int i = 0; i < 10; i++) {
             String name = UUID.randomUUID().toString();
             Item item = new Item(name, name.length());
             list.add(i, item);
         }
+        return list;
     }
 
     //******************** Jet Pack
