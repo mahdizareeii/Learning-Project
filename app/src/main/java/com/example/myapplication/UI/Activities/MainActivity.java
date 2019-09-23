@@ -5,17 +5,24 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.PagedList;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.JetPack.LiveData.GetNumberLiveData;
+import com.example.myapplication.JetPack.Paging.Adapter.RecyclerViewAdapter;
+import com.example.myapplication.JetPack.Paging.Model.StackApiResponse;
+import com.example.myapplication.JetPack.Paging.ViewModel.ItemViewModel;
 import com.example.myapplication.JetPack.Room.Student;
 import com.example.myapplication.JetPack.Room.StudentInitializer;
 import com.example.myapplication.JetPack.ViewModel.GetNumberViewModel;
@@ -48,7 +55,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setUpRecyclerView();
+        setUpRecyclerViewPaging();
 
 
     }
@@ -99,6 +106,25 @@ public class MainActivity extends BaseActivity {
     }
 
     //******************** Jet Pack
+    private void setUpRecyclerViewPaging() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+
+        ItemViewModel itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
+
+        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(this);
+
+        itemViewModel.itemPagedList.observe(this, new Observer<PagedList<StackApiResponse.Item>>() {
+            @Override
+            public void onChanged(PagedList<StackApiResponse.Item> items) {
+                adapter.submitList(items);
+            }
+        });
+
+        recyclerView.setAdapter(adapter);
+    }
+
     private void getNumberLiveData() {
         GetNumberLiveData getNumberLiveData = ViewModelProviders.of(this).get(GetNumberLiveData.class);
         LiveData<String> getNumber = getNumberLiveData.getNumber();
