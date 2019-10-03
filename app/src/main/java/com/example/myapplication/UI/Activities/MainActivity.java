@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.JetPack.LiveData.GetNumberLiveData;
+import com.example.myapplication.JetPack.Navigation.NavigationActivity;
 import com.example.myapplication.JetPack.Paging.Adapter.RecyclerViewAdapter;
 import com.example.myapplication.JetPack.Paging.Model.StackApiResponse;
 import com.example.myapplication.JetPack.Paging.ViewModel.ItemViewModel;
@@ -118,6 +119,9 @@ public class MainActivity extends BaseActivity {
         });
 
         recyclerView.setAdapter(adapter);
+
+            startActivity(new Intent(this, NavigationActivity.class));
+
     }
 
     private void getNumberLiveData() {

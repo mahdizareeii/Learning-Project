@@ -40,8 +40,8 @@ public class ItemDataSource extends PageKeyedDataSource<Integer, StackApiRespons
                 .enqueue(new Callback<StackApiResponse>() {
                     @Override
                     public void onResponse(Call<StackApiResponse> call, Response<StackApiResponse> response) {
-                        Integer adjacentKey = (params.key > 1) ? params.key - 1 : null;
                         if (response.body() != null) {
+                            Integer adjacentKey = (params.key > 1) ? params.key - 1 : null;
                             callback.onResult(response.body().items, adjacentKey);
                         }
                     }
