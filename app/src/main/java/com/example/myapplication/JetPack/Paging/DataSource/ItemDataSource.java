@@ -12,7 +12,7 @@ import retrofit2.Response;
 
 public class ItemDataSource extends PageKeyedDataSource<Integer, StackApiResponse.Item> {
 
-    public static final int PAGE_SIZE = 50;
+    public static final int PAGE_SIZE = 10;
     private static final int FIRST_PAGE = 1;
     private static final String SITE_NAME = "stackoverflow";
 
