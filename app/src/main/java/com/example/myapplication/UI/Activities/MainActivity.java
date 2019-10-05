@@ -120,8 +120,6 @@ public class MainActivity extends BaseActivity {
 
         recyclerView.setAdapter(adapter);
 
-            startActivity(new Intent(this, NavigationActivity.class));
-
     }
 
     private void getNumberLiveData() {
