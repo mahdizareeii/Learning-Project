@@ -28,6 +28,7 @@ import com.example.myapplication.LazyLoad.Model.Item;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.R;
 import com.example.myapplication.Retrofit.RetrofitHelper;
+import com.example.myapplication.RxJava.RxSample;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileAsyncTask.DownloadTask;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadFileService;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadReceiver;
@@ -50,13 +51,18 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        setUpRecyclerViewPaging();
-
+        rxSample();
 
     }
 
-    //******************** EndLess RecyclerView
+    //******************** RXJava Sample and
+    private void rxSample() {
+        RxSample rxSample = new RxSample(this);
+        rxSample.observable6(5560);
+        rxSample.subscribe6();
+    }
+
+    //******************** EndLess RecyclerView (LazyLoad)
     private void setUpRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -100,6 +106,7 @@ public class MainActivity extends BaseActivity {
         }
         return list;
     }
+    //******************** /EndLess RecyclerView (LazyLoad)
 
     //******************** Jet Pack
     private void setUpRecyclerViewPaging() {
@@ -227,7 +234,6 @@ public class MainActivity extends BaseActivity {
     }
     //******************** /Jet Pack
 
-
     //******************** DownloadFile
     private void downloadFileWithService(String url) {
         String fileName = url.substring(url.lastIndexOf('/') + 1);
@@ -258,7 +264,6 @@ public class MainActivity extends BaseActivity {
 
     }
     //******************** /DownloadFile
-
 
     //******************** Retrofit
     private void sendRequestToServer() {
