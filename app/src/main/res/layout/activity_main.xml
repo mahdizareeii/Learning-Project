@@ -9,8 +9,14 @@
     android:orientation="vertical"
     tools:context=".UI.Activities.MainActivity">
 
+    <Button
+        android:id="@+id/btnNext"
+        android:text="@string/next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

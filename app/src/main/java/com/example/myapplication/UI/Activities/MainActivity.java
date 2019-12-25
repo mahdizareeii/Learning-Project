@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
@@ -15,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.JetPack.LiveData.GetNumberLiveData;
-import com.example.myapplication.JetPack.Navigation.NavigationActivity;
 import com.example.myapplication.JetPack.Paging.Adapter.RecyclerViewAdapter;
 import com.example.myapplication.JetPack.Paging.Model.StackApiResponse;
 import com.example.myapplication.JetPack.Paging.ViewModel.ItemViewModel;
@@ -28,7 +29,7 @@ import com.example.myapplication.LazyLoad.Model.Item;
 import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.R;
 import com.example.myapplication.Retrofit.RetrofitHelper;
-import com.example.myapplication.RxJava.RxSample;
+import com.example.myapplication.RxJava.RxJava2.RxSample2;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileAsyncTask.DownloadTask;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadFileService;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadReceiver;
@@ -43,7 +44,7 @@ public class MainActivity extends BaseActivity {
 
     //for downloading
     private ProgressDialog progressDialog;
-
+    private Button button;
     //for recyclerview
     private List<Item> list = new ArrayList<>();
 
@@ -51,15 +52,24 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        button = findViewById(R.id.btnNext);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ListActivity.class));
+            }
+        });
         rxSample();
 
     }
 
     //******************** RXJava Sample and
     private void rxSample() {
-        RxSample rxSample = new RxSample(this);
-        rxSample.observable6(5560);
-        rxSample.subscribe6();
+        /*RxSample rxSample = new RxSample(this);
+        rxSample.observable1("hello world");
+        rxSample.subscriber1();*/
+        RxSample2 rxSample2 = new RxSample2();
+        rxSample2.getListRxWithoutFreezingUi();
     }
 
     //******************** EndLess RecyclerView (LazyLoad)

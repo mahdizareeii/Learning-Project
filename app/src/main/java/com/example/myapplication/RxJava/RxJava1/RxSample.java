@@ -1,5 +1,5 @@
-package com.example.myapplication.RxJava;
-
+package com.example.myapplication.RxJava.RxJava1;
+/*
 import android.content.Context;
 import android.widget.Toast;
 
@@ -207,4 +207,4 @@ public class RxSample {
         observable.subscribe(subscriber);
     }
 
-}
+}*/
