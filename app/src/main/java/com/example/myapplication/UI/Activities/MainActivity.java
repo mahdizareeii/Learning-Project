@@ -30,6 +30,7 @@ import com.example.myapplication.Models.ItemResult;
 import com.example.myapplication.R;
 import com.example.myapplication.Retrofit.RetrofitHelper;
 import com.example.myapplication.RxJava.RxJava2.RxSample2;
+import com.example.myapplication.RxJava.RxJava3.RxSample3;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileAsyncTask.DownloadTask;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadFileService;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadReceiver;
@@ -56,10 +57,10 @@ public class MainActivity extends BaseActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ListActivity.class));
+                //startActivity(new Intent(MainActivity.this, ListActivity.class));
+                rxSample();
             }
         });
-        rxSample();
 
     }
 
@@ -68,8 +69,12 @@ public class MainActivity extends BaseActivity {
         /*RxSample rxSample = new RxSample(this);
         rxSample.observable1("hello world");
         rxSample.subscriber1();*/
-        RxSample2 rxSample2 = new RxSample2();
-        rxSample2.getListRxWithoutFreezingUi();
+
+        /*RxSample2 rxSample2 = new RxSample2();
+        rxSample2.getListRxWithoutFreezingUi();*/
+
+        RxSample3<Integer> rxSample3 = new RxSample3<>(MainActivity.this);
+        rxSample3.test2(1,2,3);
     }
 
     //******************** EndLess RecyclerView (LazyLoad)
