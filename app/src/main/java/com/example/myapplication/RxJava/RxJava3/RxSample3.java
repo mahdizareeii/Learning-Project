@@ -1,9 +1,11 @@
 package com.example.myapplication.RxJava.RxJava3;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -11,7 +13,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
-public class RxSample3{
+public class RxSample3 {
 
     private Context context;
 
@@ -120,7 +122,7 @@ public class RxSample3{
                 .map(new Function<Integer, Integer>() {
                     @Override
                     public Integer apply(Integer i) throws Exception {
-                        return  i*5;
+                        return i * 5;
                     }
                 })
                 .subscribe(getObserver());
@@ -150,5 +152,50 @@ public class RxSample3{
         };
     }
 
+    public void showToastWithRx(String a, String b, String c) {
+        Observable<String> observable = Observable.just(a, b, c);
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(String s) throws Exception {
+                        return s + "operator";
+                    }
+                })
+                .flatMap(new Function<String, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(String s) throws Exception {
+                        return null;
+                    }
+                }).switchMap(new Function<String, ObservableSource<String>>() {
+            @Override
+            public ObservableSource<String> apply(String s) throws Exception {
+                return null;
+            }
+        }).subscribe(new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                d.dispose();
+                Log.i("rxjava", "onSubscribe: " + d.isDisposed());
+            }
 
+            @Override
+            public void onNext(String s) {
+                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                Log.i("rxjava", "onNext: " + s);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.i("rxjava", "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+                Log.i("rxjava", "onComplete: ");
+            }
+        });
+
+    }
 }

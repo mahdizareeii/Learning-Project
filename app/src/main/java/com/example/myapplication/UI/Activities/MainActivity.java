@@ -66,7 +66,8 @@ public class MainActivity extends BaseActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ListActivity.class));
+                //startActivity(new Intent(MainActivity.this, ListActivity.class));
+                rxSample();
             }
         });
 
@@ -82,7 +83,7 @@ public class MainActivity extends BaseActivity {
         rxSample2.getListRxWithoutFreezingUi();*/
 
         RxSample3 rxSample3 = new RxSample3(MainActivity.this);
-        rxSample3.observableWithMap(1, 2, 3);
+        rxSample3.showToastWithRx("a","b","c");
     }
 
     //******************** EndLess RecyclerView (LazyLoad)
