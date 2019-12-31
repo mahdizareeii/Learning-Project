@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -31,6 +32,10 @@ import com.example.myapplication.R;
 import com.example.myapplication.Retrofit.RetrofitHelper;
 import com.example.myapplication.RxJava.RxJava2.RxSample2;
 import com.example.myapplication.RxJava.RxJava3.RxSample3;
+import com.example.myapplication.RxJava.RxJavaWithRetrofit.Model.Comment;
+import com.example.myapplication.RxJava.RxJavaWithRetrofit.Model.Post;
+import com.example.myapplication.RxJava.RxJavaWithRetrofit.Retrofit.RequestApi;
+import com.example.myapplication.RxJava.RxJavaWithRetrofit.Retrofit.ServiceGenerator;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileAsyncTask.DownloadTask;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadFileService;
 import com.example.myapplication.Utils.DownloadFile.DownloadFileService.DownloadReceiver;
@@ -40,6 +45,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
 
@@ -57,8 +66,7 @@ public class MainActivity extends BaseActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(MainActivity.this, ListActivity.class));
-                rxSample();
+                startActivity(new Intent(MainActivity.this, ListActivity.class));
             }
         });
 
@@ -73,8 +81,8 @@ public class MainActivity extends BaseActivity {
         /*RxSample2 rxSample2 = new RxSample2();
         rxSample2.getListRxWithoutFreezingUi();*/
 
-        RxSample3<Integer> rxSample3 = new RxSample3<>(MainActivity.this);
-        rxSample3.test2(1,2,3);
+        RxSample3 rxSample3 = new RxSample3(MainActivity.this);
+        rxSample3.observableWithMap(1, 2, 3);
     }
 
     //******************** EndLess RecyclerView (LazyLoad)

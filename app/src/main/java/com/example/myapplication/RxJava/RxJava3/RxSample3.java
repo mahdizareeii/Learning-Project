@@ -7,9 +7,11 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
-public class RxSample3<T> {
+public class RxSample3{
 
     private Context context;
 
@@ -17,21 +19,21 @@ public class RxSample3<T> {
         this.context = context;
     }
 
-    public void test1(T a, T b, T c) {
+    public void observableWithSubscribeActual(int a, int b, int c) {
 
-        /*new Observable<T>(){
+        /*new Observable<Integer>(){
             @Override
-            protected void subscribeActual(Observer<? super T> observer) {
+            protected void subscribeActual(Observer<? super Integer> observer) {
 
             }
-        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<T>() {
+        }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(T t) {
+            public void onNext(Integer t) {
 
             }
 
@@ -46,9 +48,9 @@ public class RxSample3<T> {
             }
         });*/
 
-        Observable<T> observable = new Observable<T>() {
+        Observable<Integer> observable = new Observable<Integer>() {
             @Override
-            protected void subscribeActual(Observer<? super T> observer) {
+            protected void subscribeActual(Observer<? super Integer> observer) {
                 observer.onNext(a);
                 observer.onNext(b);
                 observer.onNext(c);
@@ -61,19 +63,19 @@ public class RxSample3<T> {
 
     }
 
-    public void test2(T a, T b, T c) {
+    public void observableWithJust(int a, int b, int c) {
 
         /*Observable.just(a,b,c)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<T>() {
+                .subscribe(new Observer<Integer>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(T t) {
+                    public void onNext(Integer t) {
 
                     }
 
@@ -88,22 +90,51 @@ public class RxSample3<T> {
                     }
                 });*/
 
-        Observable<T> observable = Observable.just(a, b, c);
+        Observable<Integer> observable = Observable.just(a, b, c);
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(getObserver());
     }
 
-    private Observer<T> getObserver() {
-        return new Observer<T>() {
+    public void observableWithFilter(int a, int b, int c) {
+        Observable<Integer> observable = Observable.just(a, b, c);
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).filter(new Predicate<Integer>() {
+            @Override
+            public boolean test(Integer i) throws Exception {
+                if (i == 1) {
+                    return false;
+                }
+                return true;
+            }
+        }).subscribe(getObserver());
+    }
+
+    public void observableWithMap(int a, int b, int c) {
+        Observable<Integer> observable = Observable.just(a, b, c);
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(new Function<Integer, Integer>() {
+                    @Override
+                    public Integer apply(Integer i) throws Exception {
+                        return  i*5;
+                    }
+                })
+                .subscribe(getObserver());
+    }
+
+    private Observer<Integer> getObserver() {
+        return new Observer<Integer>() {
             @Override
             public void onSubscribe(Disposable d) {
 
             }
 
             @Override
-            public void onNext(T t) {
+            public void onNext(Integer t) {
                 Toast.makeText(context, t + "", Toast.LENGTH_SHORT).show();
             }
 

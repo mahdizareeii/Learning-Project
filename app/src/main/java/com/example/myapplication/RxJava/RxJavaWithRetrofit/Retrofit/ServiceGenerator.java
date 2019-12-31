@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
 
-    public static final String base_url = "https://jsonplaceholder.typicde.com/";
+    public static final String base_url = "https://jsonplaceholder.typicode.com/";
 
     private static Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
             .baseUrl(base_url)
