@@ -1,8 +1,11 @@
 package com.example.myapplication.RxJava.RxJava3;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.util.Random;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -196,6 +199,38 @@ public class RxSample3 {
                 Log.i("rxjava", "onComplete: ");
             }
         });
+
+    }
+
+    public void addItemWithRx(String[] item) {
+        Observable<String[]> observable = Observable.just(item);
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Observer<String[]>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String[] strings) {
+                        for (int i = 0; i < strings.length; i++) {
+                            strings[i] = String.valueOf(new Random().nextInt());
+                            Log.i("rxTag", strings[i]);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
 
     }
 }

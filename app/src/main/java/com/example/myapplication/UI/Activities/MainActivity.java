@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity {
         rxSample2.getListRxWithoutFreezingUi();*/
 
         RxSample3 rxSample3 = new RxSample3(MainActivity.this);
-        rxSample3.showToastWithRx("a","b","c");
+        rxSample3.addItemWithRx(new String[5226321]);
     }
 
     //******************** EndLess RecyclerView (LazyLoad)
